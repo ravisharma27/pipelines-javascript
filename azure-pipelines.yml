@@ -24,3 +24,20 @@ steps:
 - script: |
     npm run build
   displayName: 'npm install and build'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.BinariesDirectory)'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: UniversalPackages@0
+  inputs:
+    command: 'publish'
+    publishDirectory: '$(Build.ArtifactStagingDirectory)'
+    feedsToUsePublish: 'internal'
+    vstsFeedPublish: 'ffa81c02-9b80-4e23-a1d6-68950d84af64/8887d051-f6e7-47ee-97ec-6d8c52dd3d37'
+    vstsFeedPackagePublish: 'my-first-package'
+    versionOption: 'minor'
